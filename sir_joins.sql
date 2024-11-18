@@ -87,6 +87,18 @@ from  students s inner join course c
 on s.cid =  c.cid
 order by s.sname;
 
+
+/*
+   STUDENTS             COURSE
+SID SNAME CID        CID  CNAME
+1	 a	  1           1    sql
+2	 b	  1           2	   plsql
+3	 c	  3           3	   python
+4	 d	  4           4	   java
+5	 e	  null        5	   html
+*/
+
+
 /*
 SNAME CNAME   CID
 a	  sql	  1
@@ -106,10 +118,21 @@ d	  java	  4
 -- from students,course
 -- where student.cid = course.cid(+); "
 
-select s.sname, c.cname, s.cid
+select s.sname, c.cname, s.cid, s.sid
 from  students s left outer join course c
 on c.cid =  s.cid
 order by s.sname;
+
+
+/*
+   STUDENTS             COURSE
+SID SNAME CID        CID  CNAME
+1	 a	  1           1    sql
+2	 b	  1           2	   plsql
+3	 c	  3           3	   python
+4	 d	  4           4	   java
+5	 e	  null        5	   html
+*/
 
 /*
 SNAME CNMAE  CID
@@ -134,6 +157,19 @@ from  students s right outer join course c
 on c.cid =  s.cid
 order by s.sname;
 
+
+/*
+   STUDENTS             COURSE
+SID SNAME CID        CID  CNAME
+1	 a	  1           1    sql
+2	 b	  1           2	   plsql
+3	 c	  3           3	   python
+4	 d	  4           4	   java
+5	 e	  null        5	   html
+*/
+
+
+
 /*
 SNAME CNAME    CID
 a	   sql   	1
@@ -145,6 +181,8 @@ NULL   plsql   NULL
 */
 
 
+
+
 -- OUTER JOINS
 -- FULL OUTER JOINS
 -- matched and unmatched records from both tables
@@ -153,6 +191,18 @@ select s.sname, c.cname, s.cid
 from  students s full outer join course c
 on c.cid =  s.cid
 order by s.sname;
+
+
+/*
+   STUDENTS             COURSE
+SID SNAME CID        CID  CNAME
+1	 a	  1           1    sql
+2	 b	  1           2	   plsql
+3	 c	  3           3	   python
+4	 d	  4           4	   java
+5	 e	  null        5	   html
+*/
+
 
 /*
 SNAME  CNAME   CID
@@ -164,6 +214,3 @@ e		NULL    NULL
 NULL    html	NULL
 NULL    plsql	NULL
 */
-
-drop table course;
-drop table students;
