@@ -2,7 +2,7 @@ JOINS:
 
 Normalization:
 
-In real time projects, all the data's in the database will be deparated in different tables based on the data category. this is called normalization.
+In real time projects, all the datas in the database will be deparated in different tables based on the data category. this is called normalization.
 
 
 
@@ -192,4 +192,4 @@ e1.first_name,
 e2.employee_id,
 e2.first_name
 from employees e1 self join employees e2
-where e1.manager_id = e2.employee_id
+ON e1.manager_id = e2.employee_id

@@ -1,5 +1,5 @@
 -- JOINS  
---  in order to fetch te records from more than one table we will go with joins
+--  in order to fetch the records from more than one table we will go with joins
 
 -- 1 INNER JOINS
 -- 2 OUTER JOINS

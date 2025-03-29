@@ -1,0 +1,16 @@
+INDEX
+
+SQL Intro
+	What is Oracle SQL, What is Database, What is Schemas, What is RDBMS, What are the tools, Why we learn SQL, How can I use it ,What is * in SQL Query, What is table, What is data in table , what is fields in table , what is records in table
+
+CLAUSES in SQL
+	SELECT CLAUSES	 FROM CLAUSES	WHERE/ON CLAUSES 	ORDER BY CLAUSES
+
+RELATIONAL OPERATORS
+	<,   >,   <=,   >=,   =,    !=	 		BETWEEN,  LIKE,  ALL,  IN,  ANY
+
+DDL	( DATA MANUPULATION LANGUAGE )
+	CREATE,  ALTER (  ADD COLUMN, DROP COLUMN, MODIFY COLUMN, RENAME COLUMN) , RENAME, TRUNCATE, DROP
+
+DML ( DATA MANUPULATION LANGUAGE )
+	INSERT,  DELETE,  UPDATE,  MERGE

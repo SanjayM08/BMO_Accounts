@@ -23,8 +23,6 @@ select substr(details,1,instr(details,'/')-1)id,
 select * from emp;
 
 
-
-
 -- Number Function
 -- Round, Trunc,Floor, Ceil, Mod, Power.
 

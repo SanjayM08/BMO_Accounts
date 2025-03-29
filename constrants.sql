@@ -47,6 +47,7 @@ BLOB - binary large object              -- video, audio, image, doc     -- 4gb
 CLOB - character large object           -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 4gb bytes --   varchar2(10) -- siva - 4bytes  -- balence 6 bytes free
 
 
+
 --constraints
 
 primary key     -- it is an combination of unique and not null,, we can use only one PK in a table

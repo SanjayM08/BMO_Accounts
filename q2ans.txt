@@ -1,0 +1,285 @@
+-- 1.How would you generate a series of numbers from 50 to 150
+
+select 50 + level -1 as num from dual connect by level  101;
+
+
+-- 2.How would you convert a timestamp into a formatted date string (e.g., YYYY-MM-DD HHMISS)
+
+select to_char (sysdate, 'YYY-MM-DD HH24MISS')as  string from dual;
+
+
+-- 3.Write a query to find the highest and lowest salary in each department, along with the difference between them.
+
+select  from employees;
+
+select department_id,max(salary) AS highest_salary,min(salary) AS lowest_salary,max(salary) - min(salary) AS salary_difference
+from employees group by  department_id;
+
+
+-- 4.Write a query to pivot sales data, showing total sales per product per quarter
+
+-- 5.How would you create a view that shows the cumulative total sales per product up to the current date
+
+-- 6.How would you handle NULL values in a column when calculating the average salary, ignoring NULLs
+
+select salary, COMMISSION_PCT,nvl (COMMISSION_PCT,0) as Sum from employees;
+
+SELECT 
+    AVG(NVL(salary, 0)) AS average_salary,
+    AVG(NVL(commission_pct, 0)) AS average_commission
+FROM 
+    employees;
+
+
+
+  7.Given four teams India, Australia, Europe, and Indonesia, 
+	write a SQL query using only JOINs to generate all possible unique pairs of teams, 
+	ensuring that each team is paired with every other team exactly once.
+
+Output
+This corrected query will produce unique pairs of teams
+
+team1	team2
+Australia	Europe
+Australia	India
+Australia	Indonesia
+Europe	India
+Europe	Indonesia
+India	Indonesia
+
+
+
+
+create table team (team varchar2 (100));
+
+select  from team;
+
+insert all 
+into team values('Australia')
+into team values('Europe')
+into team values('India')
+into team values('Indonesia')
+select  from dual;
+
+select  from team;
+
+select e.team as team1, r.team as team2 from team e join team r on e.team  r.team;
+
+
+-- 8.Write a SQL query to find all pairs of employees who report to the same manager.
+
+select employee_id,first_name from employees;
+select DEPARTMENT_ID,MANAGER_ID from departments;
+
+select e.employee_id,e.first_name,'Reports to', d.manager_id, e.first_name as Manager_Name  from employees e join departments d 
+on e.manager_id = d.manager_id
+order by 
+    e.employee_id;
+
+-- 9.Write a SQL query to find departments that have more employees than the average number of employees across all departments.
+
+select  d.department_id, d.department_name, count(e.employee_id) as employee_count
+from  departments d join employees e
+on d.department_id = e.department_id
+group by  d.department_id, d.department_name 
+having count(e.employee_id)  (select avg(employee_count) 
+from (select count(employee_id) as employee_count from employees  group by department_id) subquery)
+order by  employee_count desc;
+
+
+--  10.Write a SQL query to calculate the difference in salary between each employee and the next one, ordered by salary.
+
+select employee_id, first_name, salary, 
+lead(salary) over(order by salary) as salary_diff,
+lead(salary) over(order by salary) - salary as salary_difference
+from employees;
+
+-- 11.Write a SQL query to rank departments based on their total salary expenditure.
+
+select d.department_id, d.department_name,sum(e.salary) as total_salary,
+rank() over (order by sum(e.salary) desc) as salary_rank
+from  departments d join  employees e on d.department_id = e.department_id
+group by  d.department_id, d.department_name
+order by  salary_rank;
+
+-- 12.Write a SQL query to check if the string Helloworld starts with Hello.
+
+-- 13.Write a SQL query to repeat the character 'A' five times.
+
+-- 14.Write a SQL query to remove all spaces from the string Data Science is fun.
+
+select replace('Data Science is fun', ' ', '') as result from dual;
+
+-- 15.Write a SQL query to extract the digits after the decimal point from the number 123.456, so that the result is 456.
+
+select cast((123.456 - floor(123.456))  1000 as int) as result from dual; 
+
+
+
+   16.Given the following table named A
+
+  x
+------
+  2
+ -2
+  4
+ -4
+ -3    
+  0
+  2
+
+Write a single query to calculate the sum of all positive values of x and 
+sum of all negative values of x
+
+
+
+
+create table A ( x number);
+
+insert into A (x) values (2);
+insert into A (x) values (-2);
+insert into A (x) values (4);
+insert into A (x) values (-4);
+insert into A (x) values (-3);
+insert into A (x) values (0);
+insert into A (x) values (2);
+
+select  from a;
+
+select  sum(case when x  0 then x else 0 end) as sum_positive,
+sum(case when x  0 then x else 0 end) as sum_negative from A;
+
+
+  
+
+17.	SELECT  FROM runners;
+
+id	name         
+1	John Doe     
+2	Jane Doe     
+3	Alice Jones  
+4 	Bobby Louis  
+5	Lisa Romero  
+
+SELECT  FROM races;
+
+id	event		winner_id 
+1	100 meter dash	2        
+2	500 meter dash	3        
+3	cross-country	2        
+4	triathalon		NULL     
+
+What will be the result of the query below
+
+SELECT  FROM runners WHERE id NOT IN (SELECT winner_id FROM races)
+
+
+
+create table runners (
+    id number,
+    name varchar(100)
+);
+
+create table races (
+    id number,
+    event varchar(100),
+    winner_id number
+);
+
+insert all
+into runners (id, name) values (1, 'John Doe')
+into runners (id, name) values (2, 'Jane Doe')
+into runners (id, name) values (3, 'Alice Jones')
+into runners (id, name) values (4, 'Bobby Louis')
+into runners (id, name) values (5, 'Lisa Romero')
+select  from dual;
+
+
+insert all
+into races (id, event, winner_id) values (1, '100 meter dash', 2)
+into races (id, event, winner_id) values (2, '500 meter dash', 3)
+into races (id, event, winner_id) values (3, 'cross-country', 2)
+into races (id, event, winner_id) values (4, 'triathalon', NULL)
+select  from dual;
+
+select   from runners 
+where id not in (select winner_id from  races where winner_id is not null);
+
+
+----------------------------------------------------------------------------
+
+
+
+
+SELECT LEVEL + 49 AS num FROM dual CONNECT BY LEVEL <= 101;
+
+
+select to_char(sysdate,'YY-MM-DD HH24MISS')as string from dual;
+
+
+
+
+select * from employees 
+where salary = (select max(salary) from employees ) 
+and  salary = (select min(salary) from employees );
+
+
+
+
+
+
+
+
+
+
+
+
+select first_name, last_name from employees ;
+
+select first_name, last_name, department_id from employees 
+where department_id = 60;
+
+select * from employees where salary < 8000;
+
+select department_id,count(*) from employees group by department_id;
+
+
+select first_name,last_name,hire_date from employees where hire_date > to_date('1995-01-01','YYYY-MM-DD');
+
+-- Find the department names managed by employee with employee_id = 100.
+
+select e.department_id ,d.department_name 
+from employees e join departments d 
+on d.department_id = e.department_id 
+where e.manager_id = 100;
+
+select e.first_name, d.department_name , d.manager_id 
+from departments d join employees e 
+--on e.department_id = d.department_id
+on e.manager_id = d.manager_id 
+where e.manager_id = 100;
+
+
+
+select job_id from employees;
+select job_id , avg(salary) from employees group by job_id;
+
+
+select * from employees where job_id = 'SA_REP';
+
+select first_name,last_name,salary from employees where salary=(select max(salary)from employees);
+
+
+--Delete the employee record with employee_id = 150 from the employees table
+
+CREATE TABLE Aclone AS
+select * from employees where 1 = 0;
+
+insert into aclone
+select * from employees;
+
+select * from aclone ;
+
+delete from aclone where employee_id=150;
+
+drop table aclone;

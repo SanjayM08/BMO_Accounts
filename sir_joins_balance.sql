@@ -245,7 +245,7 @@ e	    html
 
 /*
 SELFT JOIN 
-Joinig the table with it self is called self join
+    Joinig the table with it self is called self join
 */
 
 

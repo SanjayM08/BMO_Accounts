@@ -21,8 +21,8 @@ select * from employees;
 
 
 -- NVL2 will accept 3 arguments
--- 1st is  argument null ==> 3ed argument is output
--- 1st is not argument null ==> 2nd argument is output
+-- 1st is null argument null ==> 3ed argument is output
+-- 1st is not null argument null ==> 2nd argument is output
 
 select nvl2(3,4,5) from dual; ==> 4
 select nvl2(null,4,5) from dual; ==> 5
@@ -73,6 +73,7 @@ select first_name,salary from employees where salary > 10000;
 select first_name,COMMISSION_PCT from employees where COMMISSION_PCT is null;
 
 select first_name,COMMISSION_PCT from employees where COMMISSION_PCT = null;
+
 empty becous null is not equal to null 
 it will give the structure alone
 

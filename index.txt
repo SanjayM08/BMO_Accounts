@@ -1,0 +1,61 @@
+from
+where
+group by
+having
+select
+order by
+
+
+redo log buffer
+
+
+index is used for faster retravel of data but it will slow down the DML operations
+
+index will be order the column with respective rowid to mapped then it will saved in the table space
+
+giving the pk for opetimization
+
+we can create multiple none cluster index
+
+
+
+
+Cluster Index
+
+cluster index entire table will be order in the main table 
+
+but we can create only one cluster index coz it will modify the main table entirely based on the given index column 
+
+types 
+
+	unique
+	non unique
+		binary tree (default index)
+		bit map
+		function based 
+		composite
+
+
+create unique index index_name on table_name(column_name);  -- unique
+
+
+create index_name on table_name(column_name);  binary tree
+
+
+
+when we have more number of duplicates we go for bit map index (ex gender)
+create bit map index index_name on table (column) -- bit map
+
+
+when we go with any function based filters we go with function based index
+create index_name on employees(upper(name))
+
+
+composite index
+
+more than one column more than filters we go with composite 
+
+create index_name on employees(name,salary); 
+it will order the name and when duplicate comes it also order the name with salary order
+
+
