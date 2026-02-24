@@ -1,6 +1,6 @@
-ANALYTICAL FUNCTION:
+--ANALYTICAL FUNCTION:
 
-It compute an aggregate values based on group of rows;
+--It compute an aggregate values based on group of rows;
 
 1--RANK()
 2--DENSE_RANK()

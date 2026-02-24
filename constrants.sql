@@ -29,6 +29,11 @@ datatypes:
 char        -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 2000 bytes --  'siva' -- s-1 byte, i-1byte, v-1bytes,, char(10) -- siva -- it will reserve the memory
 varchar     -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 2000 bytes --   varchar2(2000) -- siva - 4bytes  -- balence 6 bytes free -- older version
 varchar2    -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 4000 bytes --   varchar2(10) -- siva - 4bytes  -- balence 6 bytes free
+nvarchar2   -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 4000 bytes --   varchar2(10) -- siva - 4bytes  -- balence 6 bytes free  -- it will support unicode data
+nvarchar    -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 4000 bytes --   varchar2(10) -- siva - 4bytes  -- balence 6 bytes free  -- it will support unicode data  -- older version
+long varchar  -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 2gb bytes --   varchar2(10) -- siva - 4bytes  -- balence 6 bytes free  -- for extentable 32k bytes
+
+
 
 --numeric
 
@@ -44,7 +49,7 @@ timestamp       -- DD-MM-YYYY HH-MM-SS
 
 long                                    -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 2gb bytes --   varchar2(10) -- siva - 4bytes  -- balence 6 bytes free
 BLOB - binary large object              -- video, audio, image, doc     -- 4gb
-CLOB - character large object           -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 4gb bytes --   varchar2(10) -- siva - 4bytes  -- balence 6 bytes free
+CLOB(a table have only one clob) - character large object           -- a-z,A-Z,1-0,!@#$%^&*()_(   ) -- 4gb bytes --   varchar2(10) -- siva - 4bytes  -- balence 6 bytes free
 
 
 

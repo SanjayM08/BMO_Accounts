@@ -1,0 +1,59 @@
+/*1. Employee Transfer Tracking
+Scenario;
+In an IT company, employees are sometimes transferred from one department to another. 
+The management wants to maintain a log of all transfers.
+Task:
+Create a table emp_transfer_log(emp_id, old_dept_id, new_dept_id, transfer_date, updated_by).
+Write a procedure transfer_employee(p_emp_id, p_new_dept_id, p_updated_by) which:
+Updates the employee’s department.
+Inserts a record into the emp_transfer_log table.
+Create a trigger on employees that prevents an employee from being transferred to the same department again.*/
+
+CREATE TABLE EMP1 AS
+SELECT EMPLOYEE_ID, FIRST_NAME, LAST_NAME, DEPARTMENT_ID
+FROM EMPLOYEES;
+
+SELECT * FROM EMP1;
+
+CREATE TABLE emp_transfer_log (emp_id NUMBER, old_dept_id NUMBER, new_dept_id NUMBER, 
+transfer_date DATE, updated_by NUMBER);
+
+CREATE OR REPLACE PROCEDURE transfer_employee(p_emp_id IN NUMBER, 
+p_new_dept_id IN  NUMBER, p_updated_by IN NUMBER)
+AS 
+VDEPID NUMBER;
+BEGIN
+SELECT DEPARTMENT_ID INTO VDEPID
+FROM EMP1 WHERE EMPLOYEE_ID = p_emp_id;
+UPDATE EMP1 SET DEPARTMENT_ID = p_new_dept_id
+WHERE EMPLOYEE_ID = p_emp_id ;
+COMMIT;
+INSERT INTO emp_transfer_log VALUES (p_emp_id,VDEPID,p_new_dept_id , SYSDATE,p_updated_by);
+COMMIT;
+END;
+/
+
+CREATE OR REPLACE TRIGGER trg_before_emp1
+BEFORE INSERT ON emp_transfer_log
+FOR EACH ROW
+BEGIN
+   IF :NEW.old_dept_id = :NEW.new_dept_id
+  THEN
+      RAISE_APPLICATION_ERROR(-20071,'SAME DEP ADDED IN DEP');
+   END IF;
+END;
+/
+
+
+BEGIN
+    transfer_employee(110, 90, 1001); 
+END;
+/
+SELECT * FROM emp_transfer_log;
+SELECT * FROM EMP1;
+
+
+
+
+
+

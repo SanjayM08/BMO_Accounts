@@ -12,7 +12,6 @@ union
 select employee_id, first_name from t2;
 
 /*
-
 101	Neena
 102	Lex
 103	Alexander

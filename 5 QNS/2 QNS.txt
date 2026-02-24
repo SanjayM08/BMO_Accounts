@@ -1,0 +1,79 @@
+/*2. 
+Department Salary Budget Check
+Scenario:
+Each department has a budget for salaries. If inserting/updating an employee causes the department’s 
+total salary to exceed the budget, the transaction should be rejected.
+Task:
+Create a table dept_budget(dept_id, budget_amt).
+Write a trigger on employees for INSERT/UPDATE that checks if the total salary of employees in that department 
+exceeds the budget. If yes, raise an error.
+Write a function get_remaining_budget(p_dept_id) that returns how much budget is left for a department.
+*/
+--DROP table dept_budget;
+Create table dept_budget AS
+SELECT A.DEPARTMENT_ID, DEPARTMENT_NAME,SUM(SALARY) CURRENT_SAL,SUM(SALARY)+SUM(SALARY)/4 budget_amt
+FROM EMPLOYEES A, DEPARTMENTS B
+WHERE A.DEPARTMENT_ID=B.DEPARTMENT_ID
+GROUP BY A.DEPARTMENT_ID, DEPARTMENT_NAME;
+
+CREATE TABLE TEMP25_2_EMPLOYEES AS
+SELECT * FROM EMPLOYEES;
+
+SELECT * FROM TEMP25_2_EMPLOYEES;
+SELECT * FROM dept_budget;
+
+CREATE OR REPLACE TRIGGER trg_before_TEMP25_2
+BEFORE INSERT OR UPDATE ON TEMP25_2_EMPLOYEES
+FOR EACH ROW
+DECLARE
+VBUD NUMBER;
+VCURR NUMBER;
+BEGIN
+SELECT BUDGET_AMT INTO  VBUD FROM dept_budget
+WHERE DEPARTMENT_ID = :NEW.DEPARTMENT_ID;
+SELECT CURRENT_SAL INTO VCURR FROM dept_budget 
+WHERE DEPARTMENT_ID = :NEW.DEPARTMENT_ID;
+ IF INSERTING THEN
+        VCURR := VCURR + :NEW.salary;
+        UPDATE dept_budget SET CURRENT_SAL = CURRENT_SAL +:NEW.salary  WHERE DEPARTMENT_ID = :NEW.DEPARTMENT_ID;
+    ELSIF UPDATING THEN
+        VCURR := VCURR - :OLD.salary + :NEW.salary;
+        UPDATE dept_budget SET CURRENT_SAL = CURRENT_SAL -:OLD.salary + :NEW.salary  WHERE DEPARTMENT_ID = :NEW.DEPARTMENT_ID;
+    END IF;
+    IF VCURR > vbud THEN
+        RAISE_APPLICATION_ERROR(-20001, 'Department budget exceeded!');
+    END IF;
+END;
+/
+
+CREATE OR REPLACE FUNCTION get_remaining_budget(p_dept_id IN NUMBER)
+RETURN NUMBER
+AS
+CURRSAL NUMBER;
+BUDSAL NUMBER;
+VOUT NUMBER;
+BEGIN
+SELECT  CURRENT_SAL INTO CURRSAL
+FROM dept_budget WHERE DEPARTMENT_ID = p_dept_id;
+SELECT   BUDGET_AMT INTO BUDSAL
+FROM dept_budget  WHERE DEPARTMENT_ID = p_dept_id;
+VOUT := BUDSAL-CURRSAL;
+RETURN VOUT;
+END;
+/
+
+SELECT * FROM dept_budget;
+SELECT * FROM temp25_2_employees;
+
+UPDATE temp25_2_employees SET SALARY = 20000  WHERE EMPLOYEE_ID = 101;
+COMMIT;
+
+SELECT 24000+17000+17000 FROM DUAL;
+
+DECLARE 
+VOUT NUMBER;
+BEGIN
+VOUT := get_remaining_budget (90) ;
+DBMS_OUTPUT.PUT_LINE(VOUT);
+END;
+/

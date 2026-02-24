@@ -1,0 +1,62 @@
+/*cursor 
+fetch the records consistancy
+bulk collect
+cant fetch the records consistancy*/
+
+
+--ref cursor:
+
+-- when we want to move multiple rows of records from one plsql block to anothor or to the dashbords or op
+-- refcursor we can open it for diffrent queries
+
+
+WEAK  REF CURSOR
+WIHTOUT MENTIONING/DEFINIG THE DATA
+SYS_REFCURSOR (MULTIPLE RECORDS)
+
+
+STRONG REF CURSOR
+WIHT MENTIONING/DEFINIG THE DATA
+SELECT COL1,COL2,COL3 
+
+
+CREATE OR REPLACE FUNCTION FNAME 
+          RETURN SYS_REFCURSOR
+          IS
+              VCURR SYS_REFCURSOR;
+          BEGIN
+              OPEN VCURR
+              FOR
+              SELECT FIRST_NAME FROM EMPLOYEES;
+              RETURN VCURR;
+          END FNAME;
+          /
+          
+          DECLARE
+          V1 SYS_REFCURSOR;
+          VNAME VARCHAR2(100);
+          BEGIN
+          V1:=FNAME;
+          FETCH V1 INTO VNAME;
+          DBMS_OUTPUT.PUT_LINE(VNAME);
+          END;
+          /
+
+declare
+type t_rec is record (v_name varchar2(1000), v_sal number,v_narr varchar2(1000));
+type t_ref is ref cursor return t_rec;
+v_ref t_ref;
+v_out t_rec;
+begin
+open v_ref
+for
+select acct_no, BALANCE_OS,TXN_NARR
+from fallback_daily where TXN_NARR is not null;
+fetch v_ref into v_out;
+DBMS_OUTPUT.PUT_LINE(v_out.v_name||' balance is '''||v_out.v_sal||''' narration '||v_out.v_narr);
+end;
+/
+
+
+select * from fallback_daily;
+

@@ -1,0 +1,143 @@
+json mean
+
+send http request
+get post put delete
+
+
+receive json response
+(eg:{"name" : "archana","age" : "20"})
+
+
+
+a user send a request that hit the web applicaion than will connect to the web server using api calls
+that web server hve the database tht will give the respose to the user using api calls
+that api calls will handle with the java codes
+
+
+json request example
+{
+    "action":{"type":"A"},
+    "employees":[
+        {
+            "id":1,
+            "name":"alice",
+            "department":"cse"
+        },
+        {
+            "id":2,
+            "name":"arun",
+            "department":"hr"
+        }
+    ],
+    "company_info":{
+        "name":"ABC CORP",
+        "location":"Bengalore"
+    }
+}
+
+
+
+
+java code json request handle 
+
+variable convert
+function sql query calls
+'begin
+p_main(v1,v2,v3,v4)
+end;
+/'
+
+
+create or replace p_main(v1,v2,v3,v4)
+as
+begin
+if v1 ='login' then
+plogin(v1,v2,v3);
+elsif v1 = 'new' then
+plogin(v1,v2,v3);
+elsif v1 = 'forget pass' then
+preset(v1,v2,v3);
+end if;
+end;
+/
+
+
+
+
+
+
+-- Create table
+CREATE TABLE JSON_DATA_TABLE (
+    ID NUMBER,
+    JSON_DOCUMENT CLOB CHECK (JSON_DOCUMENT IS JSON)
+);
+
+-- Insert valid JSON
+INSERT INTO JSON_DATA_TABLE (ID, JSON_DOCUMENT) VALUES (
+    1,
+    '{
+        "EMPLOYEES": [
+            {"id": 1, "name": "alice", "department": "cse"},
+            {"id": 2, "name": "arun", "department": "hr"}
+        ],
+        "company_info": {
+            "name": "ABC CORP",
+            "location": "Bengalore"
+        }
+    }'
+);
+
+-- Query JSON data
+SELECT jt.*
+FROM JSON_DATA_TABLE d,
+     JSON_TABLE(
+        d.JSON_DOCUMENT,
+        '$.EMPLOYEES[*]'
+        COLUMNS (
+            EMPLOYEE_ID NUMBER       PATH '$.id',
+            EMPLOYEE_NAME VARCHAR2(100) PATH '$.name',
+            EMPLOYEE_DEPARTMENT VARCHAR2(100) PATH '$.department'
+        )
+     ) jt;
+
+
+
+
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

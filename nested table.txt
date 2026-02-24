@@ -1,0 +1,151 @@
+---nested table 
+
+DECLARE
+    -- Declare a nested table type
+    TYPE T_VAR IS TABLE OF VARCHAR2(100);
+    -- Declare a variable of that type
+    V_VAR T_VAR := T_VAR();  -- Initialize the nested table
+BEGIN
+    -- Add elements to the nested table
+    V_VAR.EXTEND;
+    V_VAR(1) := 'LEX';
+    
+    V_VAR.EXTEND;
+    V_VAR(2) := 'STEVEN';
+    
+    -- Loop through the nested table and print values
+    FOR I IN 1 .. V_VAR.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE(V_VAR(I));
+    END LOOP;
+END;
+/
+
+
+
+DECLARE 
+TYPE T_VAR IS TABLE OF VARCHAR2(100);
+V_VAR T_VAR := T_VAR('ALEX','NEENA');
+BEGIN
+V_VAR.EXTEND();
+V_VAR(3):= 'LEX';
+V_VAR.EXTEND();
+V_VAR(4):= 'STEVEN';
+FOR I IN 1..V_VAR.COUNT LOOP
+DBMS_OUTPUT.PUT_LINE(V_VAR(I));
+END LOOP;
+END;
+/
+
+
+
+DECLARE 
+TYPE T_VAR IS TABLE OF VARCHAR2(100);
+V_VAR T_VAR := T_VAR('ALEX','NEENA');
+BEGIN
+V_VAR.EXTEND();-- MEMORY SPACE ALLOCATED 
+V_VAR(3):= 'LEX';
+V_VAR.EXTEND();
+V_VAR(4):= 'STEVEN';
+FOR I IN 1..V_VAR.COUNT LOOP
+DBMS_OUTPUT.PUT_LINE(V_VAR(I));
+END LOOP;
+V_VAR.DELETE(2);
+FOR I IN 1..V_VAR.LAST LOOP
+IF V_VAR.EXISTS(I) THEN
+DBMS_OUTPUT.PUT_LINE(V_VAR(I));
+END IF ;
+END LOOP;
+END;
+/
+
+
+CREATE OR REPLACE TYPE T_SAM AS OBJECT (E_ID NUMBER,ENAME VARCHAR2(100));
+
+CREATE OR REPLACE TYPE T_NES AS TABLE OF T_SAM;
+
+CREATE OR REPLACE FUNCTION F1
+RETURN T_NES
+AS
+V_OUT T_NES:=T_NES();
+BEGIN
+V_OUT.EXTEND();
+V_OUT(1):=1;
+V_OUT.EXTEND();
+V_OUT(2):=2;
+V_OUT.EXTEND();
+V_OUT(3):=3;
+RETURN V_OUT;
+END;
+/
+
+SELECT * FROM TABLE(F_1());
+
+CREATE OR REPLACE TYPE T_SAM AS OBJECT (E_ID NUMBER,ENAME VARCHAR2(100));
+
+CREATE OR REPLACE TYPE T_NES AS TABLE OF T_SAM;
+
+CREATE OR REPLACE FUNCTION F_1
+RETURN T_NES
+AS
+V_OUT T_NES:=T_NES();
+BEGIN
+V_OUT.EXTEND();
+V_OUT(1):=T_sam(1,'lex');
+V_OUT.EXTEND();
+V_OUT(2):=T_sam(2,'lex');
+V_OUT.EXTEND();
+V_OUT(3):=T_sam(3,'lex');
+RETURN V_OUT;
+END;
+/
+
+select * from table(f_1());
+
+select e.*
+from employees e inner join table(f_1()) t
+on upper(e.first_name)= t.ename;
+
+
+
+
+--- varray
+
+DECLARE 
+TYPE T_VAR IS varray(4) OF VARCHAR2(100);
+V_VAR T_VAR := T_VAR('ALEX','NEENA');
+BEGIN
+V_VAR.EXTEND();                 -- MEMORY SPACE ALLOCATED 
+V_VAR(2):= 'LEX';
+V_VAR.EXTEND();
+V_VAR(4):= 'STEVEN';
+/*V_VAR.EXTEND();
+V_VAR(2):= 'daily';*/
+FOR I IN 1..V_VAR.COUNT LOOP
+DBMS_OUTPUT.PUT_LINE(V_VAR(I));
+END LOOP;
+END;
+/
+
+
+---    pipeline function
+create or replace function fun1
+return t_nes PIPELINED
+as
+begin
+pipe row (t_sam(1,'lex'));
+pipe row (t_sam(2,'alex'));
+pipe row (t_sam(3,'neena'));
+pipe row (t_sam(4,'steven'));
+end;
+/
+
+
+
+
+
+
+
+
+
+
+

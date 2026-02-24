@@ -1,0 +1,100 @@
+-- 1 find the number of a in the given input string
+
+select length('sanjay')-length(replace('sanjay','a','')) from dual;
+
+-- 2 
+create table c1 (col1 varchar2(10) );
+create table c2 (col2 varchar2(10) );
+
+insert into c1 values(1);
+insert into c1 values(1);
+insert into c1 values(2);
+insert into c1 values(3);
+insert into c1 values(4);
+insert into c1 values(6);
+insert into c1 values(null);
+
+insert into c2 values(3);
+insert into c2 values(1);
+insert into c2 values(1);
+insert into c2 values(3);
+insert into c2 values(5);
+insert into c2 values(null);
+insert into c2 values(null);
+
+
+select * from c1;
+select * from c2;
+
+
+--inner join 
+select A.col1, B.col2 
+from c1 A, c2 B
+where A.col1=B.col2;
+
+--left join
+select A.col1, B.col2 
+from c1 A, c2 B
+where A.col1=B.col2(+);
+
+--right join 
+select A.col1, B.col2 
+from c1 A, c2 B
+where A.col1(+)=B.col2;
+
+--full join
+select A.col1, B.col2 
+from c1 A, c2 B
+where A.col1(+)=B.col2
+UNION all
+select A.col1, B.col2 
+from c1 A, c2 B
+where A.col1=B.col2(+);
+
+
+
+-- 3 FIND THE NUMBER OF THE YEARS EXPERIENCE IN EMPLOYEES TABLE 
+
+SELECT EMPLOYEE_ID,HIRE_DATE,SYSDATE, SUM(TRUNC(MONTHS_BETWEEN(SYSDATE,HIRE_DATE)/12)) AS YEARS FROM EMPLOYEES
+GROUP BY EMPLOYEE_ID,HIRE_DATE,SYSDATE;
+
+-- 4 FIND THE EMPLOYEES WHO ARE GETTING MORE THAN AVG SALARY IN EACH DEPARTMENT USING CTE
+
+WITH DEPT_AVG AS (
+    SELECT DEPARTMENT_ID, AVG(SALARY) AS AVG_SAL
+    FROM EMPLOYEES
+    GROUP BY DEPARTMENT_ID
+)
+SELECT E.FIRST_NAME, E.SALARY, E.DEPARTMENT_ID, D.AVG_SAL
+FROM EMPLOYEES E
+JOIN DEPT_AVG D ON E.DEPARTMENT_ID = D.DEPARTMENT_ID
+WHERE E.SALARY > D.AVG_SAL;
+
+
+
+-- 5 FIND THE 5TH HIGHEST SALARY WITH OUT USING ANALYTICAL FUNCTION
+
+SELECT * FROM (
+SELECT EMPLOYEE_ID,SALARY,DENSE_RANK() OVER(ORDER BY SALARY DESC) AS RANKK FROM EMPLOYEES)
+WHERE RANKK = 5;
+
+-- 6 
+
+create table COURSE (SIDS NUMBER , COURSE_NAME VARCHAR2(10));
+
+INSERT INTO COURSE VALUES(1,'SQL');
+INSERT INTO COURSE VALUES(1,'PLSQL');
+INSERT INTO COURSE VALUES(2,'SQL');
+INSERT INTO COURSE VALUES(3,'SQL');
+INSERT INTO COURSE VALUES(3,'PLSQL');
+INSERT INTO COURSE VALUES(2,'JAVA');
+INSERT INTO COURSE VALUES(2,'PLSQL');
+COMMIT;
+
+SELECT * FROM COURSE;
+
+SELECT B.* FROM (
+SELECT COUNT(SIDS) CNT,SIDS FROM COURSE  
+GROUP BY SIDS) A, COURSE B
+WHERE A.CNT=3 AND A.SIDS = B.SIDS
+;

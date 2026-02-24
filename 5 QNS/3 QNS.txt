@@ -1,0 +1,138 @@
+/*
+3. Employee Performance Bonus Calculation
+Scenario
+At the end of the year, HR gives bonuses to employees based on their salary and department performance.
+Task:
+Create a table emp_bonus(emp_id, bonus_amt, bonus_year).
+Write a procedure calculate_bonus(p_year) which:
+Uses a cursor to fetch all employees.
+Applies logic (e.g., 10% bonus for IT dept, 8% for HR, etc.).
+Inserts results into emp_bonus.
+Write a function get_bonus(p_emp_id, p_year) that returns the bonus of a given employee.
+*/
+
+
+CREATE TABLE TEMP25_3_EMPLOYEES AS
+SELECT * FROM EMPLOYEES;
+
+SELECT * FROM TEMP25_3_EMPLOYEES; 
+SELECT * FROM DEPARTMENTS; 
+
+CREATE TABLE emp_bonus (
+  emp_id      NUMBER(10) NOT NULL,
+  bonus_amt   NUMBER(12,2),
+  bonus_year  NUMBER(4) NOT NULL,
+  CONSTRAINT pk_emp_bonus PRIMARY KEY (emp_id, bonus_year)
+);
+CREATE TABLE dept_bonus (
+  dept_id    NUMBER PRIMARY KEY,
+  bonus_pct  NUMBER(7,4)
+);
+
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (10, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (20, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (30, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (40, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (50, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (60, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (70, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (80, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (90, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (100, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (110, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (120, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (130, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (140, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (150, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (160, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (170, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (180, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (190, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (200, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (210, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (220, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (230, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (240, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (250, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (260, 0.10);
+INSERT INTO dept_bonus (dept_id, bonus_pct) VALUES (270, 0.10);
+COMMIT;
+
+CREATE OR REPLACE PROCEDURE calculate_bonus(p_year IN NUMBER) IS
+  CURSOR cur_emp IS
+    SELECT employee_id, salary, department_id
+    FROM TEMP25_3_EMPLOYEES;
+
+  v_emp_id   TEMP25_3_EMPLOYEES.employee_id%TYPE;
+  v_salary   TEMP25_3_EMPLOYEES.salary%TYPE;
+  v_dept_id  TEMP25_3_EMPLOYEES.department_id%TYPE;
+  v_pct      NUMBER := 0;
+  v_bonus    NUMBER(12,2);
+
+BEGIN
+  -- Remove existing bonus entries for the given year
+  DELETE FROM emp_bonus WHERE bonus_year = p_year;
+
+  OPEN cur_emp;
+  LOOP
+    FETCH cur_emp INTO v_emp_id, v_salary, v_dept_id;
+    EXIT WHEN cur_emp%NOTFOUND;
+
+    -- Fetch bonus percentage from dept_bonus table
+    BEGIN
+      SELECT bonus_pct
+      INTO v_pct
+      FROM dept_bonus
+      WHERE dept_id = v_dept_id;
+    EXCEPTION
+      WHEN NO_DATA_FOUND THEN
+        v_pct := 0;  -- If department not in dept_bonus, no bonus
+    END;
+
+    -- Calculate bonus
+    v_bonus := NVL(v_salary, 0) * NVL(v_pct, 0);
+
+    -- Insert into emp_bonus
+    INSERT INTO emp_bonus (emp_id, bonus_amt, bonus_year)
+    VALUES (v_emp_id, ROUND(v_bonus, 2), p_year);
+
+  END LOOP;
+  CLOSE cur_emp;
+
+  COMMIT;
+
+EXCEPTION
+  WHEN OTHERS THEN
+    ROLLBACK;
+    RAISE;
+END calculate_bonus;
+/
+
+CREATE OR REPLACE FUNCTION get_bonus(
+    p_emp_id  IN NUMBER,
+    p_year    IN NUMBER
+) RETURN NUMBER IS
+    v_bonus emp_bonus.bonus_amt%TYPE;
+BEGIN
+    SELECT bonus_amt
+    INTO v_bonus
+    FROM emp_bonus
+    WHERE emp_id = p_emp_id
+      AND bonus_year = p_year;
+
+    RETURN v_bonus;
+
+EXCEPTION
+    WHEN NO_DATA_FOUND THEN
+        RETURN 0; -- If no bonus found, return 0
+    WHEN OTHERS THEN
+        RAISE;
+END get_bonus;
+/
+-- Get bonus for employee 101 in year 2025
+SELECT get_bonus(101, 2025) AS bonus FROM dual;
+
+
+EXEC calculate_bonus(2025);
+
+
