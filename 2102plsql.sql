@@ -80,8 +80,8 @@ end;
 
 
 --attributes
-%type
-%rowtype
+--%type
+--%rowtype
 
 --rowtype is used to declare a record variable that can hold an entire row of data from a table. 
 --It allows you to work with multiple columns of data as a single unit.
